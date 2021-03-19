@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>[Bài tập] Xây dựng lớp mô tả Temperature</title>
+</head>
+<body>
+  <h1></h1>
+  <script>
+    class Mobile {
+      constructor() {
+        this.on = false;
+        this.battery = 3;
+        this.messageCurrent = '';
+        this.messageReceived = [];
+        this.messageSended = [];
+      }
+  
+      checkOn() {
+        return this.on;
+      }
+      
+      turnOn() {
+        this.on = !this.on;
+      }
+      
+      charge() {
+        this.battery = 100;
+        this.on = true;
+      }
+      
+      autoTurnOff() {
+        if (this.battery === 0) {
+          this.on = false;
+          alert('Hết pin');
+        }
+      }
+      
+      decreaseEnergy() {
+        this.battery--;
+        this.autoTurnOff();
+      }
+      
+      createMessage(msg) {
+        if (this.checkOn()) {
+          this.messageCurrent = msg;
+          this.decreaseEnergy();
+        }
+      }
+      
+      sendMessage(phone) {
+        if (this.checkOn()) {
+          this.messageSended.push(this.messageCurrent);
+          this.decreaseEnergy();
+          phone.receiveMessage(this.messageCurrent);
+        }
+      }
+      
+      receiveMessage(msg) {
+        if (this.checkOn()) {
+          this.messageReceived.push(msg);
+          this.decreaseEnergy();
+        }
+      }
+      
+      showReceivedMessage() {
+        if (this.checkOn()) {
+          let messages = '';
+          for (let i in this.messageReceived) {
+            messages += "Message " + i + " : " + this.messageReceived[i] + "\n";
+          }
+          alert(messages);
+          this.decreaseEnergy();
+        } else {
+          alert('Hãy bật máy');
+        }
+      }
+  
+      showSendedMessage() {
+        if (this.checkOn()) {
+          let messages = '';
+          for (let i in this.messageSended) {
+            messages += "Message " + i + " : " + this.messageSended[i] + "\n";
+          }
+          alert(messages);
+          this.decreaseEnergy();
+        } else {
+          alert('Hãy bật máy');
+        }
+      }
+    }
+
+    let nokia = new Mobile();
+    let iphone = new Mobile();
+
+    nokia.turnOn(true);
+    iphone.turnOn(true);
+
+    // nokia.chargingBattery();
+    // iphone.chargingBattery();
+
+    nokia.createMessage("Đây là một tin nhắn");
+    nokia.sendMessage(iphone);
+    iphone.showReceivedMessage();
+    // nokia.sendMessage(nokia.messageCurrent, iphone);
+    // console.log(nokia.battery);
+  </script>
+</body>
+</html>
